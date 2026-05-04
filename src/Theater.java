@@ -30,6 +30,18 @@ public class Theater extends Venue implements Displayable {
         this.showtimes = new ArrayList<>();
     }
 
+    //no-arg constructor
+    public Theater() {
+        super(0, ""); //default venue ID and name
+        this.theaterID = 0;
+        this.address = "";
+        this.city = "";
+        this.state = "";
+        this.zip = "";
+        this.screens = new ArrayList<>();
+        this.showtimes = new ArrayList<>();
+    }
+
     //getters and setters
     //theater ID
     public int getTheaterID() {
