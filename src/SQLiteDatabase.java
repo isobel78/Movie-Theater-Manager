@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: May 1, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  *
  * Class to handle database interactions with a SQLite database.
  * The connect method will either connect to an existing database or create the database if it doesn't exist.

@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: May 1, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  *
  * This class provides CRUD operations for the Showtimes table.
  *
@@ -211,40 +211,51 @@ public class ShowtimeDB {
         }
     }
 
-    //FUNCTION: print to console all showtimes grouped by theater
-    //PARAMS: venueID
+    //FUNCTION: print to console all showtimes grouped by theater and screen
+    //PARAMS: venueID (999 admin sees all showtimes)
     public static void listShowtimes(Connection conn, int venueID) {
+        //get the theaters visible to this user
         ArrayList<Theater> theaters = TheaterDB.getAllTheaters(conn, venueID);
-        ArrayList<Screen> allScreens = ScreenDB.getAllScreens(conn);
-        ArrayList<Showtime> allShowtimes = getAllShowtimes(conn, venueID);
 
-        System.out.println();
+        if (theaters.isEmpty()) {
+            System.out.println("  No theaters found.");
+            return;
+        }
 
         boolean anyShown = false;
 
+        System.out.println();
+
         for (Theater t : theaters) {
+            //get all screens for this theater
+            ArrayList<Screen> allScreens = ScreenDB.getScreensByTheater(conn, t.getTheaterID());
+            if (allScreens.isEmpty()) continue;
+
             boolean theaterPrinted = false;
 
             for (Screen s : allScreens) {
-                if (s.getTheaterID() != t.getTheaterID()) continue;
+                //get all showtimes for this screen
+                ArrayList<Showtime> allShowtimes = getShowtimesByScreen(conn, s.getScreenID());
+                if (allShowtimes.isEmpty()) continue;
 
-                for (Showtime st : allShowtimes) {
-                    if (st.getScreen().getScreenID() != s.getScreenID()) continue;
-
-                    //print theater header once before its first showtime
-                    if (!theaterPrinted) {
-                        System.out.println("  " + t.display());
-                        theaterPrinted = true;
-                        anyShown = true;
-                    }
-
-                    System.out.printf("    [ID %-3d] Screen %-2d | %-28s | %s  %s%n",
-                        st.getShowtimeID(),
-                        s.getScreenNumber(),
-                        st.getMovie().getTitle(),
-                        st.getShowDate(),
-                        st.getShowTime());
+                //print theater header before showtimes
+                if (!theaterPrinted) {
+                    System.out.println(t.display());
+                    theaterPrinted = true;
+                    anyShown = true;
                 }
+
+                // Print screen sub-header
+                System.out.println(s.display());
+
+                //print showtimes by screen                
+                for (Showtime st : allShowtimes) {
+                    System.out.println("\t\t" + st.getShowDate() + 
+                                       "\t" + st.getShowTime() +
+                                       "\t" +st.getMovie().getTitle());
+                }
+
+                System.out.println();
             }
 
             if (theaterPrinted) System.out.println();
@@ -252,4 +263,60 @@ public class ShowtimeDB {
 
         if (!anyShown) System.out.println("  No showtimes found.");
     }
+
+    //FUNCTION: print to console all showtimes grouped by theater and screen
+    //PARAMS: venueID (999 admin sees all showtimes)
+    public static void listShowtimesWithID(Connection conn, int venueID) {
+        //get the theaters visible to this user
+        ArrayList<Theater> theaters = TheaterDB.getAllTheaters(conn, venueID);
+
+        if (theaters.isEmpty()) {
+            System.out.println("  No theaters found.");
+            return;
+        }
+
+        boolean anyShown = false;
+
+        System.out.println();
+
+        for (Theater t : theaters) {
+            //get all screens for this theater
+            ArrayList<Screen> allScreens = ScreenDB.getScreensByTheater(conn, t.getTheaterID());
+            if (allScreens.isEmpty()) continue;
+
+            boolean theaterPrinted = false;
+
+            for (Screen s : allScreens) {
+                //get all showtimes for this screen
+                ArrayList<Showtime> allShowtimes = getShowtimesByScreen(conn, s.getScreenID());
+                if (allShowtimes.isEmpty()) continue;
+
+                //print theater header before showtimes
+                if (!theaterPrinted) {
+                    System.out.println(t.display());
+                    theaterPrinted = true;
+                    anyShown = true;
+                }
+
+                // Print screen sub-header
+                System.out.printf("\tScreen #%d  (Capacity: %d vehicles)%n",
+                                  s.getScreenNumber(), s.getVehicleCapacity());
+
+                //print showtimes by screen                
+                for (Showtime st : allShowtimes) {
+                    System.out.println("\t\t" + "[ID: " + st.getShowtimeID() + "] " + 
+                                       "\t" + st.getShowDate() + 
+                                       "\t" + st.getShowTime() +
+                                       "\t" +st.getMovie().getTitle());
+                }
+
+                System.out.println();
+            }
+
+            if (theaterPrinted) System.out.println();
+        }
+
+        if (!anyShown) System.out.println("  No showtimes found.");
+    }
+
 }

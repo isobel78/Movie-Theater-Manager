@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: May 1, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  *
  * This class provides CRUD operations for the Venues table.
  *
@@ -21,17 +21,28 @@ public class VenueDB {
     //FUNCTION: SQL to CREATE a new record
     //PARAMS: Venue object
     public static void addVenue(Connection conn, Venue v) {
+        addVenue(conn, v.name);
+    }
+
+    //FUNCTION: SQL to CREATE a new record by name
+    //PARAMS: venue name string
+    //RETURNS: generated Venue_ID, or -1 on failure
+    //used to add new venues via the Admin UI
+    public static int addVenue(Connection conn, String name) {
         String sql = "INSERT INTO Venues(Name) " +
                      "VALUES(?);";
 
-        try {
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, v.name);
+        try (PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pst.setString(1, name);
             pst.executeUpdate();
 
+            try (ResultSet keys = pst.getGeneratedKeys()) {
+                if (keys.next()) return keys.getInt(1);
+            }
         } catch (SQLException e) {
             System.err.println("Error inserting venue: " + e.getMessage());
         }
+        return -1;
     }
 
     //FUNCTION: SQL to READ a single venue by ID
@@ -41,8 +52,7 @@ public class VenueDB {
         String sql = "SELECT * FROM Venues " +
                      "WHERE Venue_ID = ?;";
 
-        try {
-            PreparedStatement pst = conn.prepareStatement(sql);
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
 
@@ -66,8 +76,7 @@ public class VenueDB {
         String sql = "SELECT * FROM Venues " +
                      "ORDER BY Venue_ID;";
 
-        try {
-            Statement stmt = conn.createStatement();
+        try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
@@ -88,8 +97,7 @@ public class VenueDB {
                      "SET Name = ? " +
                      "WHERE Venue_ID = ?;";
 
-        try {
-            PreparedStatement pst = conn.prepareStatement(sql);
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setString(1, v.name);
             pst.setInt(2, v.venueID);
             pst.executeUpdate();
@@ -106,8 +114,7 @@ public class VenueDB {
         String sql = "DELETE FROM Venues " +
                      "WHERE Venue_ID = ?;";
 
-        try {
-            PreparedStatement pst = conn.prepareStatement(sql);
+        try (PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
             pst.executeUpdate();
         } catch (SQLException e) {
@@ -120,12 +127,8 @@ public class VenueDB {
     public static void listVenues(Connection conn) {
         ArrayList<Object[]> venues = getAllVenues(conn);
 
-        System.out.println();
-        System.out.printf("  %-6s %-30s%n", "ID", "Venue Name");
-        System.out.println("  " + "-".repeat(38));
-
         for (Object[] v : venues) {
-            System.out.printf("  %-6d %-30s%n", (int) v[0], (String) v[1]);
+            System.out.println("\t[ID: " + v[0] + "]\t" + v[1]);
         }
         System.out.println();
     }

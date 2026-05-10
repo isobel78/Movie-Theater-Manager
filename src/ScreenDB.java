@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: May 1, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  *
  * This class provides CRUD operations for the Theaters table.
  *
@@ -153,15 +153,12 @@ public class ScreenDB {
 
         System.out.println();
         if (screens.isEmpty()) {
-            System.out.println("  No screens found for this theater.");
+            System.out.println("No screens found for this theater.");
             return;
         }
 
-        System.out.printf("  %-8s %-10s %-12s%n", "Scr ID", "Screen #", "Capacity");
-        System.out.println("  " + "-".repeat(32));
         for (Screen s : screens) {
-            System.out.printf("  %-8d %-10d %-12d%n",
-                s.getScreenID(), s.getScreenNumber(), s.getVehicleCapacity());
+            System.out.println("\t[ID: " + s.getScreenID() + "]  Screen #" + s.getScreenNumber() + " (Capacity: " + s.getVehicleCapacity() + " vehicles)");
         }
     }
 

@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: April 24, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  * 
  * This class represents a showtime for a movie in a specific theater. It has properties for the showtime ID, movie , screen, and the date and time of the showtime. It includes getters and setters for these properties. There is a display() method implementation from the Displayable interface to provide formatted output of the showtime details.
  */

@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: April 24, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  * 
  * This class represents a theater within a venue(chain). It has properties for the specific location and has getters and setters for the properties. It also implements the Displayable interface to provide a formatted string output of the theater.
  */
@@ -116,7 +116,7 @@ public class Theater extends Venue implements Displayable {
     //display method implementation from Displayable
     @Override
     public String display() {
-        return String.format("%s, %s, %s %s:", 
+        return String.format("%s, %s, %s, %s:", 
                              name, address, city, state);
     }
 }

@@ -1,12 +1,12 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: April 24, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  * 
  * This class represents a specific screen within a theater. It has properties for the screen number and capacity. It includes getters and setters for these properties. There is a toString() override to provide formatted output.
  */
 
-public class Screen {
+public class Screen implements Displayable {
     //properties
     private int screenID;
     private int screenNumber;
@@ -48,8 +48,8 @@ public class Screen {
 
     //toString override for formatted output
     @Override
-    public String toString() {
-        return String.format("Screen #%d | Capacity: %d vehicles | Theater ID: %d", screenNumber, vehicleCapacity, theaterID);
+    public String display() {
+        return String.format("\tScreen #%d | Capacity: %d vehicles", screenNumber, vehicleCapacity);
     }
     
 }

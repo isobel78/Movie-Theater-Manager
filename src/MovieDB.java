@@ -1,7 +1,7 @@
 /************************************************
  * Name: Atlanta Daniel
- * Date: May 1, 2026
  * Assignment: SDC330 Course Project
+ * Last Update: May 9, 2026
  *
  * This class provides CRUD operations for the Movies table.
  *
@@ -170,25 +170,23 @@ public class MovieDB {
         ArrayList<Movie> movies = getMovies(conn, venueID);
 
         System.out.println();
+
         if (movies.isEmpty()) {
             System.out.println("  No movies found.");
             return;
+        } else {
+            for (Movie m : movies) {
+                System.out.println("[ID: " + m.getMovieID() + "]  " +
+                                   m.getTitle() + "\t" +
+                                   m.getGenre() + "\t" +
+                                   m.getRating() + "\t" +
+                                   m.getRuntime() + " min");
+            }
+
+            System.out.println();
         }
 
-        System.out.printf("  %-4s %-32s %-18s %-6s %-8s%n",
-            "ID", "Title", "Genre", "Rating", "Runtime");
-        System.out.println("  " + "-".repeat(72));
-
-        for (Movie m : movies) {
-            System.out.printf("  %-4d %-32s %-18s %-6s %d min%n",
-                m.getMovieID(),
-                m.getTitle(),
-                m.getGenre(),
-                m.getRating(),
-                m.getRuntime());
-        }
+        
     }
-
-    
 
 }
