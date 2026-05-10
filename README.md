@@ -125,3 +125,6 @@ The SQLite database file (`DriveInSystem.db`) is created automatically in the wo
 
 ## License
 This project is licensed under the MIT License.
+
+## Video Demonstration
+[Video Demonstration](https://github.com/user-attachments/assets/197537f3-12cd-44a8-a4db-7a35398442cd)
